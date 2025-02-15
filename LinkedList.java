@@ -1,17 +1,35 @@
 import java.io.FileWriter;
 
+/**
+ * Methods for linked lists that store the terms and do transactions on them.
+ */
 public class LinkedList {
+    /**
+     * The first node of the linked list.
+     */
     protected Node head;
+    /**
+     * The last node of the linked list.
+     */
     protected Node tail;
-    protected String transaction;
-    protected LinkedList[] linkedLists = new LinkedList[2];
+    /**
+     * Constructor for linked lists.
+     */
     public LinkedList() {
         head = null;
         tail = null;
     }
+    /**
+     * Checks the emptiness of the linked list.
+     * @return Returns whether the linked list is empty or not.
+     */
     private boolean isEmpty(){
         return head == null;
     }
+    /**
+     * Adds the given node to the end of the linked list.
+     * @param newNode The node to be added.
+     */
     public void insertLast(Node newNode) {
         if (isEmpty()) {
             head = newNode;
@@ -21,45 +39,66 @@ public class LinkedList {
             tail = newNode;
         }
     }
-    public int numberOfElements(){ //düzelt bunu
+    /**
+     * Calculates the number of nodes of the linked list.
+     * @return Returns the number of nodes.
+     */
+    public int numberOfElements(){
         Node temp1 = this.head;
-        Node temp2;
         int count = 0;
         while(temp1 != null){
             count++;
-            temp2 = temp1;
-            temp1 = temp2.next;
+            temp1 = temp1.next;
         }
         return count;
     }
+    /**
+     * Deletes the first node of the linked list.
+     */
     private void deleteFirst(){
-        head = head.getNext();
+        head = head.next;
         if (isEmpty()){
             tail = null;
         }
     }
+    /**
+     * Finds the previous node of the given node.
+     * @param node The node to find its previous node.
+     * @return Returns the previous node.
+     */
     private Node getPrevious(Node node){
         Node tmp = head;
         Node previous = null;
         while (tmp != node) {
             previous = tmp;
-            tmp = tmp.getNext();
+            tmp = tmp.next;
         }
         return previous;
     }
+    /**
+     * Deletes the last node of the linked list.
+     */
     private void deleteLast(){
         tail = getPrevious(tail);
         if (tail != null){
-            tail.setNext(null);
+            tail.next = null;
         } else {
             head = null;
         }
     }
+    /**
+     * Deletes the given node which is not at the end or the beginning of the linked list.
+     * @param node The node to be deleted.
+     */
     private void deleteMiddle(Node node){
         Node previous;
         previous = getPrevious(node);
-        previous.setNext(node.getNext());
+        previous.next = node.next;
     }
+    /**
+     * Calls the appropriate deletion function for the given node.
+     * @param node The node to be deleted.
+     */
     private void delete(Node node){
         if(this.head == node){
             this.deleteFirst();
@@ -69,7 +108,12 @@ public class LinkedList {
             this.deleteMiddle(node);
         }
     }
-    public void print(FileWriter writer){
+    /**
+     * Prints the output to the output file.
+     * The output is ordered with respect to the power of x, then the power of y, and lastly, the power of z.
+     * @param writer The FileWriter which writes output to the output file.
+     */
+    protected void print(FileWriter writer){
         Node tempNode = this.head;
         Node tempNode2;
         String printMessage = "";
@@ -113,6 +157,10 @@ public class LinkedList {
             System.out.println("Error during writing to file.");
         }
     }
+    /**
+     * Makes suitable transactions like summing, subtracting, and multiplying on nodes of the linked list.
+     * @return Returns the processed linked list.
+     */
     public LinkedList process(){
         LinkedList tempList = new LinkedList();
         if(this.numberOfElements() > 1){
@@ -172,51 +220,25 @@ public class LinkedList {
         }
         return tempList;
     }
-    public LinkedList secondProcess(){
-        LinkedList tempList = new LinkedList();
-        Node temp1 = this.linkedLists[0].head;
-        Node temp2 = this.linkedLists[1].head;
-        if(transaction.equals("*")){
-            while (temp1 != null){
-                while (temp2 != null){
-                    Node temp3 = this.times(temp1,temp2);
-                    tempList.insertLast(temp3);
-                    temp2 = temp2.next;
-                }
-                temp1 = temp1.next;
-            }
-        }else{
-            if(transaction.equals("-")){
-                while (temp2 != null){
-                    temp2.coefficient *= -1;
-                    temp2 = temp2.next;
-                }
-            }
-            temp2 = this.linkedLists[1].head;
-
-            while (temp1 != null){
-                tempList.insertLast(temp1);
-                temp1 = temp1.next;
-            }
-            while (temp2 != null){
-                tempList.insertLast(temp2);
-                temp2 = temp2.next;
-            }
-        }
-        tempList = tempList.process();
-        temp1 = tempList.head;
-        while (temp1 != null){
-            temp1 = temp1.next;
-        }
-        return tempList;
-    }
-    private boolean isEqual(Node temp1, Node temp2){
+    /**
+     * Calculates the equivalence of given nodes' powers with respect to x, y, and z.
+     * @param temp1 The first node to be considered.
+     * @param temp2 The second node to be considered.
+     * @return Returns whether given nodes are power-equal or not.
+     */
+    protected boolean isEqual(Node temp1, Node temp2){
         if(temp1.powerOfX == temp2.powerOfX & temp1.powerOfY == temp2.powerOfY & temp1.powerOfZ == temp2.powerOfZ){
             return true;
         }
         return false;
     }
-    private Node sum(Node temp1, Node temp2){
+    /**
+     * Sums given power-equal two nodes and returns a result node.
+     * @param temp1 The first power-equal node to be summed.
+     * @param temp2 The second power-equal node to be summed.
+     * @return Returns a result node created by adding up given nodes.
+     */
+    protected Node sum(Node temp1, Node temp2){
         String newTerm = "";
         double coefficientSum = temp1.coefficient + temp2.coefficient;
         if(coefficientSum != 1){
@@ -243,7 +265,13 @@ public class LinkedList {
         Node newNode = new Node(newTerm);
         return newNode;
     }
-    private Node times(Node temp1, Node temp2){
+    /**
+     * Multiplies given two nodes and returns a result node.
+     * @param temp1 The first node to be multiplied.
+     * @param temp2 The second node to be multiplied.
+     * @return Returns a result node created by multiplying given nodes.
+     */
+    protected Node times(Node temp1, Node temp2){
         String newTerm = "";
 
         int sumOfPowers;

@@ -1,15 +1,47 @@
+/**
+ * Methods for nodes that store terms.
+ */
 public class Node {
+    /**
+     * The next node of this node.
+     */
     protected Node next;
+    /**
+     * The term of the node
+     */
     protected String term;
+    /**
+     * The coefficient of the node.
+     */
     protected double coefficient = 1;
+    /**
+     * The x's power of the node.
+     */
     protected double powerOfX = 0;
+    /**
+     * The y's power of the node.
+     */
     protected double powerOfY = 0;
+    /**
+     * The z's power of the node.
+     */
     protected double powerOfZ = 0;
+
+    /**
+     * Constructor for nodes.
+     * Also calls the setArithmeticValue function.
+     * @param term The term to be given to the setArithmeticValue function.
+     */
     public Node(String term){
         this.next = null;
         this.term = term;
         this.setArithmeticValue(term);
     }
+
+    /**
+     * Calculates and sets the attributes of the node by processing its term.
+     * @param term The term to be processed.
+     */
     private void setArithmeticValue(String term){
         if(term.charAt(0) == '+' | term.charAt(0) == '-' | term.charAt(0) == '*'){
             String tempTerm = "";
@@ -61,12 +93,12 @@ public class Node {
             this.coefficient *= -1;
         }
     }
-    public void setNext(Node next){
-        this.next = next;
-    }
-    public Node getNext(){
-        return next;
-    }
+
+    /**
+     * Prepares appropriate term for the given node to print in the output file.
+     * @param node Node to use its term.
+     * @return Returns suitable terms for printing.
+     */
     public static String termToPrint(Node node){
         String term = "";
         if(node.coefficient > 0){

@@ -2,8 +2,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.Scanner;
 
+/**
+ * Takes an input.txt file and calculates its given transactions.
+ * Then prints the output to the output.txt file.
+ */
 public class Main {
-
     public static void main(String[] args) throws Exception {
         File input = new File(Main.class.getClassLoader().getResource("input.txt").toURI());
         Scanner in = new Scanner(input);
@@ -13,7 +16,7 @@ public class Main {
         int lineNumberOfFile = Integer.parseInt(in.nextLine());
 
         for(int i = 0; i < lineNumberOfFile; i++){
-            LinkedList secondList = new LinkedList();
+            HeadList secondList = new HeadList();
             String term = "";
             String tempLine = in.nextLine();
             secondList.transaction = String.valueOf(tempLine.charAt(0));
@@ -34,9 +37,7 @@ public class Main {
                 }
                 secondList.linkedLists[j] = firstList.process();;
             }
-            secondList = secondList.secondProcess();
-
-            secondList.print(writer);
+            secondList.secondProcess(writer);
             if(i != lineNumberOfFile-1){
                 writer.write("\n");
             }
